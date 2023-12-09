@@ -15,7 +15,6 @@ void PrintLinkedList(IntNode_struct* thisNode)
     }
     else
     {
-        //printf("%d, ", thisNode->dataVal);
         IntNode_PrintData (thisNode);
         thisNode = IntNode_GetNext (thisNode);
         PrintLinkedList (thisNode);

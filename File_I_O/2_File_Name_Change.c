@@ -41,55 +41,9 @@ Voyageurs2006_info.txt
 WrangellStElias1987_info.txt
 
 */
+
 #include <stdio.h>
 #include <string.h>
-/*
-int main(void) {
-
-    
-    FILE* inFile = NULL; // File pointer
-
-    char *underscorePos;
-    char str[100];
-    int wordRead;
-
-    // Try to open the file
-    inFile = fopen("ParkPhotos.txt", "r");
-
-    if (inFile == NULL) 
-    {
-        //printf("Could not open file myfile.txt.\n");
-        return -1; // -1 indicates error
-    }
-
-    wordRead = fscanf(inFile, "%s", str);
-    // Read and process each line from the file
-    while (!feof(inFile)) 
-    {
-        if ( wordRead == 1 ) 
-        {
-            // Replace the extension in the filename
-            underscorePos = strrchr(str, '_');// Find the position of the last underscore
-            // If an underscore is found, replace "_photo.jpg" with "_info.txt"
-            if (underscorePos != NULL) 
-            {
-                strncpy(underscorePos, "_info.txt", 10);
-            }
-        }
-        else 
-        {
-            break;
-        }
-        wordRead = fscanf(inFile, "%s", str);
-        // Output the modified filename
-        printf("%s\n", str);
-    }
-
-    // Close the file
-    fclose(inFile);
-    return 0;
-}
-*/
 
 //Correct Version
 int main(void) {

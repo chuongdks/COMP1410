@@ -57,14 +57,17 @@ int main() {
         return -1;
     }
 
-    char str[100];
-    char time[MAX_ITEMS][MAX_SHOWTIMES_LENGTH];
-    char title[MAX_ITEMS][MAX_TITLE_LENGTH];
-    char rating[MAX_ITEMS][MAX_RATING_LENGTH];
+    char str[100] = {'\0'};
 
-    char test[MAX_ITEMS][MAX_TITLE_LENGTH];
+    char time[MAX_SHOWTIMES_LENGTH] = {'\0'};
+    char title[MAX_TITLE_LENGTH] = {'\0'};
+    char rating[MAX_RATING_LENGTH * 4] = {'\0'};
 
-    // read file line by line
+    char currentTime[MAX_SHOWTIMES_LENGTH] = {'\0'};
+    char currentTitle[MAX_TITLE_LENGTH] = {'\0'};
+    char currentRating[MAX_RATING_LENGTH * 4] = {'\0'};
+
+    // read file line by line --> Assign them to 'time', 'title' and 'rating' then compare 'currentTitle' with the recent 'title' variable being assigned to 
     int count = 0;
     while (fgets(str, sizeof(str), file) != NULL && count < MAX_ITEMS) 
     {
@@ -77,68 +80,40 @@ int main() {
 
         // extract fields from str separated by tabs
         char *token = strtok(str, ",");
-        strcpy(time[count], token);
+        strcpy(time, token);
         token = strtok(NULL, ",");
-        strcpy(title[count], token);
+        strncpy(title, token, 44);
         token = strtok(NULL, ",");
-        strcpy(rating[count], token);
+        strcpy(rating, token);
 
-        //printf("%s | %5s | %s\n", title[count], rating[count], time[count]);
+        //If 'currentTitle' is not the same as 'title' being assigned to (that means 2 different movie Title) and currentTitle is not empty, 
+        //then print out the 'current' info and copy the 'new' movie info to the 'current' movie info variable
+        if (strcmp(currentTitle, title) != 0) 
+        {
+            if (strcmp(currentTitle, "") != 0) 
+            {
+                printf("%-44s | %5s | %s\n", currentTitle, currentRating, currentTime);
+            }
+            strcpy(currentTitle, title);
+            strcpy(currentRating, rating);
+            strcpy(currentTime, time);
+        } 
+        //If 'currentTitle' the same as 'title' being assigned to then use strcat to add another showtime 'time' variable
+        else 
+        {
+            strcat(currentTime, " ");
+            strcat(currentTime, time);
+        }
 
         //increase item count when move to next line
         count++;
     }
-
-    // printf("\n%-44s | %s | %s\n", title[0], rating[0], time[0]);
-    // printf("%-44s | %s | %s\n", title[1], rating[1], time[1]);
-    // printf("%-44s | %s | %s\n", title[2], rating[2], time[2]);
-    // printf("%s | %s | %s\n", title[3], rating[3], time[3]);
-    // printf("%s | %s | %s\n", title[4], rating[4], time[4]);
-    // printf("%s | %s | %s\n", title[5], rating[5], time[5]);
-    // printf("%-44s | %s | %s\n", title[6], rating[6], time[6]);
-    // printf("%-44s | %s | %s\n", title[7], rating[7], time[7]);
-    // printf("%-44s | %s | %s\n\n", title[8], rating[8], time[8]);
+    if (strcmp(currentTitle, "") != 0) 
+    {
+        printf("%-44s | %5s | %s\n", currentTitle, currentRating, currentTime);
+    }
 
     fclose(file);
-
-    for (int i = 0; i < count; i++) 
-    {
-        if (strlen(title[i]) > 44)
-        {
-            //strcpy (test[i], title[i]);
-            memcpy(test[i], title[i], 44);
-            printf("%s | %.5s | %s\n", test[i], rating[i], time[i]);
-        }
-    }
-    // Organize and print the output based on movie title
-    for (int i = 0; i < count; i++) 
-    {
-        // Check if the title is the same as the previous one
-        if (strlen(title[i]) > 44)
-        {
-            if (strcmp(title[i], title[i + 1]) == 0)
-            {
-                printf("%.44s | %.5s | %s %s\n", title[i], rating[i], time[i], time[i + 1]);
-                i++; //Skip the next iteration since we need the first one to display only
-            }
-            else
-            {
-                printf("%.44s | %.5s | %s\n", title[i], rating[i], time[i]);
-            } 
-        }
-        else if (strlen(title[i]) < 44)
-        {
-            if (strcmp(title[i], title[i + 1]) == 0) 
-            {
-                printf("%-44s | %.5s | %s %s\n", title[i], rating[i], time[i], time[i + 1]);
-                i++; //Skip the next iteration since we need the first one to display only
-            }
-            else 
-            {
-                printf("%-44s | %.5s | %s\n", title[i], rating[i], time[i]);
-            } 
-        }
-    }
 
     return 0;
 }
